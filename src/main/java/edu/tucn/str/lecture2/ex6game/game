@@ -1,0 +1,5 @@
+- detectati coliziunile si opriti jocul in caz de coliuziune;
+- creati mai multe cicluri (resetati Y inamic pt Y > 700);
+
+- executati mutarea inamicilor pe un singur Thread.
+- folositi-va imaginatia si realizati un joc (de ex. scor, buton de reset, buton de stop game, etc.)
