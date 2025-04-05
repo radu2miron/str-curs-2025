@@ -5,8 +5,9 @@ package edu.tucn.str.lecture3.ex0AtomicCounter;
  * @version 1
  */
 public class Counter {
-    private int value;
+    private /*volatile*/ int value;
 
+    // todo: make increment() synchronized and re-run the program
     public void increment() {
         value += 1;
     }

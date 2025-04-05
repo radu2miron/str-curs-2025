@@ -8,11 +8,13 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Counter counter = new Counter();
 
-        new MyThread(counter).start();
-        new MyThread(counter).start();
-        new MyThread(counter).start();
+        Thread t1 = new MyThread(counter);
+        Thread t2 = new MyThread(counter);
+        Thread t3 = new MyThread(counter);
 
-        Thread.sleep(1000);
+        t1.start();
+        t2.start();
+        t3.start();
 
         System.out.println(counter.getValue());
     }
