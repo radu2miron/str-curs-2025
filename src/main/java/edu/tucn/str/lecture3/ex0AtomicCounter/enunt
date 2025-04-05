@@ -1,0 +1,3 @@
+Incremetarea unui contor de pe mai multe threaduri nu functioneaza implicit.
+Pentru a rezolva problema, metoda incremetare trebuie sa fie syncronized.
+Alternativ (modul preferat!), este sa utilizati AtomicInteger.

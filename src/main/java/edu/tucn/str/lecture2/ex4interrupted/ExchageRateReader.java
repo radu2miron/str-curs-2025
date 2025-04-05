@@ -17,29 +17,31 @@ public class ExchageRateReader {
     private static final String ONE_EURO = "1 EURO =";
 
     public static Rate getExchangeRates() throws IOException {
-        WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        webClient.getOptions().setJavaScriptEnabled(false);
-        HtmlPage page = webClient.getPage(CURS_BNR_URL);
-        String rateAsHtmlLiOptional = page.getElementsByTagName("li").stream()
-                .map(li -> li.asNormalizedText())
-                .filter(li -> li.contains(ONE_EURO))
-                .findFirst()
-                .orElse(null);
+        try (WebClient webClient = new WebClient(BrowserVersion.CHROME)) {
+            webClient.getOptions().setJavaScriptEnabled(false);
+            HtmlPage page = webClient.getPage(CURS_BNR_URL);
 
-        if(rateAsHtmlLiOptional != null) {
-            String rateAsString = Arrays.stream(rateAsHtmlLiOptional.trim().split("\n"))
-                    .map(String::trim)
-                    .filter(line -> line.startsWith(ONE_EURO))
-                    .map(l -> l.replace(ONE_EURO, "").replace("Lei", "").trim())
-                    .findFirst()
-                    .orElse(null);
+            Optional<String> liTextOptional = page.getElementsByTagName("li").stream()
+                    .map(li -> li.asNormalizedText())
+                    .filter(text -> text.contains(ONE_EURO))
+                    .findFirst();
 
-            if(rateAsString != null) {
-                double rateAsDouble = Double.parseDouble(rateAsString);
-                return new Rate("EUR", "RON", rateAsDouble);
+            if (liTextOptional.isPresent()) {
+                String liText = liTextOptional.get().trim();
+                Optional<Double> rateOptional = Arrays.stream(liText.split("\n"))
+                        .map(String::trim)
+                        .filter(line -> line.startsWith(ONE_EURO))
+                        .map(line -> line.replace(ONE_EURO, "").replace("Lei", "").trim())
+                        .filter(s -> !s.isEmpty())
+                        .map(Double::parseDouble)
+                        .findFirst();
+
+                if (rateOptional.isPresent()) {
+                    return new Rate("EUR", "RON", rateOptional.get());
+                }
             }
+            return null;
         }
-
-        return null;
     }
+
 }
