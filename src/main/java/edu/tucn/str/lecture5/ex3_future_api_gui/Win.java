@@ -60,10 +60,10 @@ public class Win extends JFrame {
         // get coins' data
         List<CoinModel> coins = CoinsApiUtils.getCoins();
         coins.forEach(c -> model.addRow(new Object[]{
-                c.data().rank(),
-                c.data().name(),
-                trim(c.data().priceUsd()),
-                trim(c.data().marketCapUsd())}));
+                c.rank(),
+                c.name(),
+                trim(c.quotes().USD().price().toString()),
+                c.quotes().USD().market_cap().toString()}));
         model.fireTableDataChanged();
     }
 

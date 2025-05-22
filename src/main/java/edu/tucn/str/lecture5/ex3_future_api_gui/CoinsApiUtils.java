@@ -19,8 +19,8 @@ import java.util.concurrent.Future;
  */
 public class CoinsApiUtils {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(5);
-    private static final String BASE_URL = "https://api.coincap.io/v2/assets/";
-    private static final List<String> COINS = List.of("bitcoin", "ethereum", "tether", "solana", "binance-coin");
+    private static final String BASE_URL = "https://api.coinpaprika.com/v1/tickers/";
+    private static final List<String> COINS = List.of("btc-bitcoin", "eth-ethereum", "usdt-tether", "xrp-xrp", "bnb-binance-coin");
 
     private static CoinModel getCoin(String coinName) throws Exception {
         URI target = new URI(BASE_URL + coinName);
@@ -56,7 +56,7 @@ public class CoinsApiUtils {
         });
 
         // sort by rank
-        coins.sort(Comparator.comparing(c -> c.data().rank()));
+        coins.sort(Comparator.comparing(CoinModel::rank));
 
         return coins;
     }
